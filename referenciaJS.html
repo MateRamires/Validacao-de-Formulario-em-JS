@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referência JS</title>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" />
+    <style>
+        .escondido {
+            display: none;
+        }
+
+        .erro {
+            color: red;
+            font-size: 90%;
+        }
+
+        .asterisco {
+            vertical-align: middle;
+            color: red;
+            padding-left: 3px;
+        }
+
+        .sucesso{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <form method="post" action="/servidor">
+            <div class="row">
+                <div class="col-12 bg-secondary text-white p-4 mt-5">
+                    <h1>Instruções</h1>
+                    <ul>
+                        <li>Ao clicar no botão <strong>Validar</strong>, se o checkbox <strong>Forçar campos
+                                obrigatórios</strong> estiver ativado, o formulário deverá ser validado;</li>
+                        <li>Os campos obrigatórios, quando ativados, devem ter um <span class="red">*</span> na frente
+                            do seu rótulo visível;</li>
+                        <li>Caso a obrigatoriedade seja desativada (checkbox), este asterisco deve sumir;</li>
+                        <li>Quando o checkbox estiver ativado, os 3 campos são obrigatórios;</li>
+                        <li>Ainda, quando ativado, o campo nome deve ter, no mínimo, 5 caracteres;</li>
+                        <li>Quando um campo obrigatório tiver erro ou for preenchido incorretamente, deve ser exibida
+                            uma mensagem em vermelho abaixo do campo. Logo que o usuário tornar o campo válido, a
+                            mensagem deve sumir.
+                        </li>
+                        <li>DESAFIO: O campo contato só pode aceitar números e letras - não use nenhuma biblioteca.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card mt-5">
+                <div class="card-header">
+                    Formulário exemplo
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="forcarObrigatorio"><input type="checkbox" id="forcarObrigatorio" onchange="mostrarCampos(this)" /> Forçar
+                                campos
+                                obrigatórios</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <label for="nome">Nome</label><span class="asterisco escondido">*</span>
+                            <input type="text" name="nome" id="nome" class="form-control" />
+                            <span class="escondido erro" id="nomeErro">O nome é obrigatório e deve ter mais de 5 caracteres.</span>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <label for="sobrenome">Sobrenome</label><span class="asterisco escondido">*</span>
+                            <input type="text" name="sobrenome" id="sobrenome" class="form-control" />
+                            <span class="escondido erro" id="sobrenomeErro">O sobrenome é obrigatório.</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="contato">Dados de contato</label><span class="asterisco escondido">*</span>
+                            <input type="text" name="contato" id="contato" class="form-control" />
+                            <span class="escondido erro" id="contatoErro">Os dados de contato são obrigatórios.</span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success mt-3" onclick="validar()">Validar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
+        </script>
+    <script>
+
+        function mostrarCampos(checkbox){
+            if(checkbox.checked){
+                document.querySelectorAll('.asterisco').forEach(asterisco => {
+                    asterisco.classList.remove("escondido")
+                })
+            } else {
+                document.querySelectorAll('.asterisco').forEach(asterisco => {
+                    asterisco.classList.add("escondido")
+                })
+            }
+        }
+
+        function validar() {
+            const nome = document.getElementById("nome");
+            const sobrenome = document.getElementById("sobrenome");
+            const contato = document.getElementById("contato");
+
+            const sobrenomeErro = document.getElementById("sobrenomeErro");
+            const nomeErro = document.getElementById("nomeErro");
+            const contatoErro = document.getElementById("contatoErro");
+
+            const final = document.getElementById("msgSucesso")
+
+            if(document.getElementById("forcarObrigatorio").checked){
+
+                let somaCamposCorretos = 0
+
+                if(nome.value.length < 5) {
+                    nomeErro.classList.remove("escondido");
+                } else {
+                    nomeErro.classList.add("escondido");
+                    somaCamposCorretos++
+                }
+
+                if(sobrenome.value.length < 1) {
+                    sobrenomeErro.classList.remove("escondido");
+                } else {
+                    sobrenomeErro.classList.add("escondido");
+                    somaCamposCorretos++
+                }
+
+                if(contato.value.length < 1) {
+                    contatoErro.classList.remove("escondido");
+                } else {
+                    contatoErro.classList.add("escondido");
+                    somaCamposCorretos++
+                }
+
+                if(somaCamposCorretos == 3){
+                    alert("Formulario validado corretamente!")
+                } 
+
+            } else {
+                nomeErro.classList.add("escondido");
+                sobrenomeErro.classList.add("escondido");
+                contatoErro.classList.add("escondido");
+
+                
+            }
+        }
+    </script>
+</body>
+
+</html>
